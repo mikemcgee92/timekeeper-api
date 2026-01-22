@@ -1,7 +1,202 @@
 <html>
  <head>
+  <title>A Simple SPA for Users</title>
+  <script type="application/javascript">
+    function displayAllUsers() {
+      clearUsersTable();
+      fetchAllUsers().then(displayUsers)
+    }
+
+    function displayUsersWithFrequency() {
+      clearUsersTable();
+      const frequency = readUserFrequency();
+      fetchUsersWithFrequency(frequency).then(displayUsers)
+    }
+
+    function displayUser(id) {
+      fetchUserWithId(id).then(t =>
+        userDisplay().innerHTML
+          = `${t.displayName} is paid ${t.frequency}`
+      )
+    }
+
+    function deleteUser(id) {
+      deleteUserWithId(id).then(() => {
+        clearUserDisplay();
+        displayAllUsers();
+      })
+    }
+
+    function deleteUserWithId(id) {
+      return sendDELETE(`/users/${id}`)
+    }
+
+    function addNewUser() {
+      const user = buildUserFromForm();
+      sendPOST("/users", user).then(displayAllUsers);
+    }
+
+    function buildUserFromForm() {
+      return {
+        displayName: getUserFormValue("newUserDisplayName"),
+        imageUrl: getUserFormValue("newUserImageUrl"),
+        rate: getUserFormValue("newUserRate"),
+        frequency: getUserFormValue("newUserFrequency")
+      }
+    }
+
+    function getUserFormValue(controlName) {
+      return document.addUserForm[controlName].value;
+    }
+
+    function userDisplay() {
+      return document.getElementById("currentUserDisplay");
+    }
+
+    function readUserFrequency() {
+      return document.frequencyForm.frequency.value
+    }
+
+    function fetchUsersWithFrequency(frequency) {
+      return sendGET(`/users/byFrequency/${frequency}`);
+    }
+
+    function fetchUserWithId(id) {
+      return sendGET(`/users/${id}`);
+    }
+
+    function fetchAllUsers() {
+      return sendGET(`/users`)
+    }
+
+    function sendGET(url) {
+      return fetch(
+        url,
+        {headers: {'Accept': 'application/json'}}
+      ).then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+        return [];
+      });
+    }
+
+    function sendPOST(url, data) {
+      return fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data)
+      });
+    }
+
+    function sendDELETE(url) {
+      return fetch(url, {
+        method: 'DELETE'
+      });
+    }
+
+    function usersTable() {
+      return document.getElementById("usersTableBody");
+    }
+
+    function clearUsersTable() {
+      usersTable().innerHTML = "";
+    }
+
+    function clearUserDisplay() {
+      userDisplay().innerText = "None";
+    }
+
+    function displayUsers(users) {
+      const usersTableBody = usersTable()
+      users.forEach(user => {
+        const newUser = userRow(user);
+        usersTableBody.appendChild(newUser);
+      });
+    }
+
+    function userRow(user) {
+      return ur([
+        ud(user.displayName),
+        ud(user.imageUrl),
+        ud(user.rate),
+        ud(user.frequency),
+        ud(viewLink(user.displayName)),
+        ud(deleteLink(user.displayName)),
+      ]);
+    }
+
+    function ur(children) {
+      const node = document.createElement("ur");
+      children.forEach(child => node.appendChild(child));
+      return node;
+    }
+
+    function ud(content) {
+      const node = document.createElement("ud");
+      if (content instanceof Element) {
+        node.appendChild(content)
+      } else {
+        node.appendChild(document.createTextNode(content));
+      }
+      return node;
+    }
+
+    function viewLink(userDisplayName) {
+      const node = document.createElement("a");
+      node.setAttribute(
+        "href", `javascript:displayUser("${userDisplayName}")`
+      )
+      node.appendChild(document.createTextNode("view"));
+      return node;
+    }
+
+    function deleteLink(userDisplayName) {
+      const node = document.createElement("a");
+      node.setAttribute(
+        "href", `javascript:deleteUser("${userDisplayName}")`
+      )
+      node.appendChild(document.createTextNode("delete"));
+      return node;
+    }
+  </script>
  </head>
- <body>
-   <h1>Hello Ktor!</h1>
+ <body onload="displayAllUsers()">
+   <h1>User Manager</h1>
+   <form action="javascript:displayAllUsers()">
+      <span>View all users</span>
+      <input type="submit" value="Go">
+   </form>
+   <form name="frequencyForm" action="javascript:displayUsersWithFrequency()">
+      <span>View users with frequency</span>
+      <select name="frequency">
+        <option name="Daily">Daily</option>
+        <option name="Weekly">Weekly</option>
+        <option name="Biweekly">Biweekly</option>
+        <option name="Monthly">Monthly</option>
+        <option name="Quarterly">Quarterly</option>
+        <option name="Yearly">Yearly</option>
+      </select>
+      <input type="submit" value="Go">
+   </form>
+   <hr>
+   <div>
+    Current user is <em id="currentUserDisplay">None</em>
+   </div>
+   <hr>
+   <table>
+    <thead>
+      <tr>
+        <th>Display Name</th>
+        <th>Image URL</th>
+        <th>Rate</th>
+        <th>frequency</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="usersTableBody">
+    </tbody>
+   </table>
  </body>
 </html>

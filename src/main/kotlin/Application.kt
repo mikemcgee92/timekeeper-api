@@ -1,5 +1,6 @@
 package com
 
+import com.model.FakeUserRepository
 import io.ktor.server.application.*
 
 fun main(args: Array<String>) {
@@ -7,7 +8,9 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
-    configureSerialization()
+    val repository = FakeUserRepository()
+
+    configureSerialization(repository)
     configureDatabases()
     configureRouting()
 }
