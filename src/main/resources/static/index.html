@@ -179,6 +179,25 @@
       </select>
       <input type="submit" value="Go">
    </form>
+   <form name="addUserForm" action="javascript:addNewUser()">
+    <span>Create new user</span>
+    <label for="newUserDisplayName">Display Name</label>
+    <input type="text" id="newUserDisplayName" name="newUserDisplayName" size="10">
+    <label for="newUserImageUrl">Image URL</label>
+    <input type="text" id="newUserImageUrl" name="newUserImageUrl" size="10">
+    <label for="newUserRate">Pay rate</label>
+    <input type="text" id="newUserRate" name="newUserRate" size="10">
+    <label for="newUserFrequency">Invoice Frequency</label>
+    <select id="newUserFrequency" name="newUserFrequency">
+      <option name="Daily">Daily</option>
+      <option name="Weekly">Weekly</option>
+      <option name="Biweekly">Biweekly</option>
+      <option name="Monthly">Monthly</option>
+      <option name="Quarterly">Quarterly</option>
+      <option name="Yearly">Yearly</option>
+    </select>
+    <input type="submit" value="Go">
+   </form>
    <hr>
    <div>
     Current user is <em id="currentUserDisplay">None</em>
