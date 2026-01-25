@@ -13,10 +13,10 @@
       fetchUsersWithFrequency(frequency).then(displayUsers)
     }
 
-    function displayUser(id) {
-      fetchUserWithId(id).then(t =>
+    function displayUser(userDisplayName) {
+      fetchUserWithDisplayName(userDisplayName).then(t =>
         userDisplay().innerHTML
-          = `${t.displayName} is paid ${t.frequency}`
+          = `${t.displayName}, who is paid ${t.frequency}`
       )
     }
 
@@ -61,8 +61,8 @@
       return sendGET(`/users/byFrequency/${frequency}`);
     }
 
-    function fetchUserWithId(id) {
-      return sendGET(`/users/${id}`);
+    function fetchUserWithDisplayName(userDisplayName) {
+      return sendGET(`/users/byName/${userDisplayName}`);
     }
 
     function fetchAllUsers() {
@@ -116,24 +116,24 @@
     }
 
     function userRow(user) {
-      return ur([
-        ud(user.displayName),
-        ud(user.imageUrl),
-        ud(user.rate),
-        ud(user.frequency),
-        ud(viewLink(user.displayName)),
-        ud(deleteLink(user.displayName)),
+      return tr([
+        td(user.displayName),
+        td(user.imageUrl),
+        td(user.rate),
+        td(user.frequency),
+        td(viewLink(user.displayName)),
+        td(deleteLink(user.displayName)),
       ]);
     }
 
-    function ur(children) {
-      const node = document.createElement("ur");
+    function tr(children) {
+      const node = document.createElement("tr");
       children.forEach(child => node.appendChild(child));
       return node;
     }
 
-    function ud(content) {
-      const node = document.createElement("ud");
+    function td(content) {
+      const node = document.createElement("td");
       if (content instanceof Element) {
         node.appendChild(content)
       } else {
