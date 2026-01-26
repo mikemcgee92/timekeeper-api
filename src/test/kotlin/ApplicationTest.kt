@@ -2,6 +2,7 @@ package com
 
 import com.model.Frequency
 import com.model.User
+import com.model.FakeUserRepository
 import io.ktor.client.call.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
@@ -30,7 +31,7 @@ class ApplicationTest {
 
         assertEquals(HttpStatusCode.OK, response.status)
 
-        val expectedUserDisplayNames = listOf("Bobson Dugnutt", "Mike Truk")
+        val expectedUserDisplayNames = listOf("The Chosen One")
         val actualUserDisplayNames = results.map(User::displayName)
         assertContentEquals(expectedUserDisplayNames, actualUserDisplayNames)
     }
