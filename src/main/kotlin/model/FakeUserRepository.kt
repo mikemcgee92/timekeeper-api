@@ -28,24 +28,24 @@ class FakeUserRepository : UserRepository {
     )
   )
 
-  override fun allUsers(): List<User> = users
+  override suspend fun allUsers(): List<User> = users
 
-  override fun usersByFrequency(frequency: Frequency) = users.filter {
+  override suspend fun usersByFrequency(frequency: Frequency) = users.filter {
     it.frequency == frequency
   }
 
-  override fun userByName(name: String) = users.find {
+  override suspend fun userByName(name: String) = users.find {
     it.displayName.equals(name, ignoreCase = true)
   }
 
-  override fun addUser(user: User) {
+  override suspend fun addUser(user: User) {
     if (userByName(user.displayName) != null) {
       throw IllegalStateException("Cannot duplicate user names")
     }
     users.add(user)
   }
 
-  override fun removeUser(displayName: String): Boolean {
+  override suspend fun removeUser(displayName: String): Boolean {
     return users.removeIf { it.displayName == displayName }
   }
 }

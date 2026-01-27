@@ -1,9 +1,9 @@
 package com.model
 
 interface UserRepository {
-  fun allUsers(): List<User>
-  fun usersByFrequency(frequency: Frequency): List<User>
-  fun userByName(name: String): User?
-  fun addUser(user: User)
-  fun removeUser(displayName: String): Boolean
+  suspend fun allUsers(): List<User>
+  suspend fun usersByFrequency(frequency: Frequency): List<User>
+  suspend fun userByName(name: String): User?
+  suspend fun addUser(user: User)
+  suspend fun removeUser(displayName: String): Boolean
 }
