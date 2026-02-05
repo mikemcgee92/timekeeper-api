@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.postgresql)
     implementation(libs.h2)
     implementation(libs.exposed.core)
+    implementation(libs.exposed.dao)
     implementation(libs.exposed.jdbc)
     implementation(libs.ktor.server.netty)
     implementation(libs.logback.classic)
