@@ -24,16 +24,16 @@ class UserDAO(id: EntityID<Int>) : IntEntity(id) {
   var imageUrl by UserTable.imageUrl
   var rate by UserTable.rate
   var frequency by UserTable.frequency
-
-  // suspendTransaction() takes a block of code and runs it within a database transaction, through the IO Dispatcher. This is designed to offload blocking jobs of work onto a thread pool
-  suspend fun <T> suspendTransaction(block: Transaction.() -> T): T =
-    newSuspendedTransaction(Dispatchers.IO, statement = block)
-  
-  // daoToModel() transforms an instance of the UserDAO type to the User object.
-  fun daoToModel(dao: TaskDAO) = Task(
-    dao.displayName,
-    dao.imageUrl,
-    dao.rate,
-    Frequency.valueOf(dao.frequency)
-  )
 }
+
+// suspendTransaction() takes a block of code and runs it within a database transaction, through the IO Dispatcher. This is designed to offload blocking jobs of work onto a thread pool
+suspend fun <T> suspendTransaction(block: Transaction.() -> T): T =
+  newSuspendedTransaction(Dispatchers.IO, statement = block)
+  
+// daoToModel() transforms an instance of the UserDAO type to the User object.
+fun daoToModel(dao: UserDAO) = User(
+  dao.displayName,
+  dao.imageUrl,
+  dao.rate,
+  Frequency.valueOf(dao.frequency)
+)
