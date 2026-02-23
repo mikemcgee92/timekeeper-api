@@ -12,8 +12,7 @@ import io.ktor.server.routing.*
 import java.sql.Connection
 import java.sql.DriverManager
 import org.jetbrains.exposed.sql.*
-import io.github.cdimascio.dotenv.dotenv
-import com.static.db_credentials.dbCredentials
+import com.db.dbCredentials
 
 fun Application.configureDatabases() {
     Database.connect(

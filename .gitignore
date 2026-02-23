@@ -36,4 +36,4 @@ out/
 .vscode/
 
 ### DB Credentials ###
-src/main/resources/db_credentials.kt
+src/main/kotlin/db/db_credentials.kt
